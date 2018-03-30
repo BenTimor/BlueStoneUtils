@@ -129,11 +129,14 @@ public class ReflectionUtils {
 			Field lastField = null;
 			int lastArg = 0;
 			for (String s : path.split("\\.")) {
-				if (s.contains("(")) {					
-					Parameter[] p = new Parameter[s.split("\\(")[1].split("\\*").length-1];
-					for (int i = 0; i < p.length; i++) {
-						p[i] = parameters[lastArg];
-						lastArg++;
+				if (s.contains("(")) {
+					Parameter[] p = new Parameter[]{};
+					if (s.contains("*")) {
+						p = new Parameter[s.split("\\(")[1].split("\\*").length-1];
+						for (int i = 0; i < p.length; i++) {
+							p[i] = parameters[lastArg];
+							lastArg++;
+						}
 					}
 					o = invokeDeclaredMethod(o, s.split("\\(")[0], p);
 					clazz = o.getClass();
